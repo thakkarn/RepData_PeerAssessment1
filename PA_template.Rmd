@@ -33,6 +33,7 @@ The dataset is stored in a comma-separated-value (CSV) file and there are a tota
 library(downloader)
 library(ggplot2)
 library(dplyr)
+library(gridExtra)
 
 download("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip", 
          dest="dataset.zip", mode="wb")
@@ -56,9 +57,9 @@ hist(daily_steps, xlab = "Daily Steps", col = "Green")
 
 ```{r}
 #mean
-tapply(activity_df$steps, activity_df$date, mean)
+mean(daily_steps, na.rm = TRUE)
 
-tapply(activity_df$steps, activity_df$date, median)
+median(daily_steps, na.rm = TRUE)
 ```
 
 ## What is the average daily activity pattern?
@@ -127,9 +128,9 @@ daily_steps <- tapply(activity_df$steps, activity_df$date, sum)
 
 hist(daily_steps, xlab = "Daily Steps", col = "Green")
 #mean
-tapply(activity_df$steps, activity_df$date, mean)
+mean(daily_steps)
 
-tapply(activity_df$steps, activity_df$date, median)
+median(daily_steps)
 ```
 
 As can be seen, the height of the histogram is higher once the missing NA values
@@ -153,12 +154,19 @@ Now let's compare the weekend and weekdays activity with a panel plot containing
 ```{r}
 activity_df_grp <- group_by(activity_df, interval, day_type)
 
-avg_steps_interval <- summarize(activity_df_grp, avg_steps = mean(steps))
+avg_steps_interval <- summarize(activity_df_grp, avg_steps = as.integer(mean(steps)))
 
-g <- ggplot(avg_steps_interval, aes(x = avg_steps_interval$interval, 
-                                    y=avg_steps_interval$avg_steps))
+activity_wkday_df <- filter(avg_steps_interval, day_type == "Wkday")
 
-g + geom_line() + facet_wrap(~ day_type, ncol = 1) + 
+activity_wkend_df <- filter(avg_steps_interval, day_type == "Wknd")
+
+g <- ggplot(activity_wkday_df, aes(x = interval, y = avg_steps))+ geom_line() + 
     labs(x = "Interval") + labs(y = "Average Steps") +
-    labs(title = "Activity Pattern: Weekdays and Weekends") 
+    labs(title = "Weekdays") 
+   
+h <- ggplot(activity_wkend_df, aes(x = interval, y = avg_steps)) + geom_line() + 
+    labs(x = "Interval") + labs(y = "Average Steps") +
+    labs(title = "Weekends") 
+
+grid.arrange(g, h, ncol = 1, top="Activity Pattern: Weekdays and Weekends")
 ```
