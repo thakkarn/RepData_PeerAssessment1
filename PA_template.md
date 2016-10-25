@@ -81,7 +81,7 @@ daily_steps <- tapply(activity_df$steps, activity_df$date, sum)
 hist(daily_steps, xlab = "Daily Steps", col = "Green")
 ```
 
-![](.\Figures\unnamed-chunk-1-1.png)<!-- -->
+![](PA_template_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
 
 ### Mean and median of total number of steps taken per day
 
@@ -117,7 +117,7 @@ qplot(x=interval, y=avg_steps, data = avg_steps_interval,
       main = "Average Steps per Interval", xlab = "Interval", ylab = "Average Steps")
 ```
 
-![](.\Figures\unnamed-chunk-3-1.png)<!-- -->
+![](PA_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 ```r
 max_avg_steps <- subset(avg_steps_interval, avg_steps == max(avg_steps_interval$avg_steps))
@@ -185,7 +185,7 @@ daily_steps <- tapply(activity_df$steps, activity_df$date, sum)
 hist(daily_steps, xlab = "Daily Steps", col = "Green")
 ```
 
-![](.\Figures\unnamed-chunk-7-1.png)<!-- -->
+![](PA_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ```r
 #mean
@@ -244,4 +244,4 @@ h <- ggplot(activity_wkend_df, aes(x = interval, y = avg_steps)) + geom_line() +
 grid.arrange(g, h, ncol = 1, top="Activity Pattern: Weekdays and Weekends")
 ```
 
-![](.\Figures\unnamed-chunk-9-1.png)<!-- -->
+![](PA_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
